@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Model Viewer with Hotspots, Info Panel & Side Menu</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Model Viewer with Hotspots</title>
 
-  <!-- Google Fonts - Lexend -->
-  <link href="https://fonts.googleapis.com/css2?family=Lexend&display=swap" rel="stylesheet">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Lexend&display=swap" rel="stylesheet"/>
 
-  <!-- Model Viewer script -->
+  <!-- Model Viewer -->
   <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.0.0/model-viewer.min.js"></script>
 
   <style>
@@ -22,19 +22,19 @@
     }
 
     #sideMenu {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 250px;
-  height: 100%; 
-  background: #f2f2f2;
-  color: rgb(0, 0, 0);
-  box-shadow: 5px 0 10px rgba(0,0,0,0.3); 
-  padding: 20px;
-  box-sizing: border-box;
-  overflow-y: auto;
-  z-index: 10; 
-}
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 250px;
+      height: 100%;
+      background: #f2f2f2;
+      color: #000;
+      box-shadow: 5px 0 10px rgba(0, 0, 0, 0.3);
+      padding: 20px;
+      box-sizing: border-box;
+      overflow-y: auto;
+      z-index: 10;
+    }
 
     #sideMenu h2 {
       font-size: 18px;
@@ -47,12 +47,11 @@
       padding: 10px;
       background: #3b8ee5;
       border: none;
-      color: #f2f2f2;
+      color: #fff;
       font-size: 14px;
       cursor: pointer;
       border-radius: 6px;
       transition: background 0.3s ease;
-      font-family: 'Lexend', sans-serif;
     }
 
     #sideMenu button:hover {
@@ -65,14 +64,12 @@
       background: #d8eafe;
     }
 
-    /* Hotspot button style */
     .Hotspot {
       background: #0b111f;
       border-radius: 4px;
       border: none;
       box-shadow: 0 1px 2px #0b111f;
       color: #f2f2f2;
-      font-family: 'Lexend', sans-serif;
       font-size: 10px;
       font-weight: 500;
       max-width: 100px;
@@ -93,15 +90,11 @@
     }
 
     .HotspotAnnotation {
-      background: none;
-      padding: 0;
       font-size: 10px;
       font-weight: bold;
       color: inherit;
-      font-family: 'Lexend', sans-serif;
     }
 
-    /* Sliding Info Panel */
     #infoPanel {
       position: fixed;
       top: 0;
@@ -109,11 +102,14 @@
       width: 300px;
       height: 100%;
       background: #f2f2f2;
-      box-shadow: -5px 0 10px rgba(0,0,0,0.3);
+      box-shadow: -5px 0 10px rgba(0, 0, 0, 0.3);
       padding: 20px;
       transition: right 0.5s ease;
       z-index: 10;
-      font-family: 'Lexend', sans-serif;
+    }
+
+    #infoPanel.show {
+      right: 0;
     }
 
     #infoPanel button.close-btn {
@@ -146,113 +142,119 @@
       width: 100%;
       padding: 10px;
       background-color: #3b8ee5;
-      color: #f2f2f2;
+      color: #fff;
       border: none;
       border-radius: 8px;
       font-size: 16px;
-      font-family: 'Lexend', sans-serif;
       cursor: pointer;
     }
-    
+
+    @media (max-width: 768px) {
+      body {
+        flex-direction: column;
+      }
+
+      #sideMenu {
+        position: static;
+        width: 100%;
+        height: auto;
+        box-shadow: none;
+        padding: 10px;
+      }
+
+      model-viewer {
+        width: 100%;
+        height: 400px;
+      }
+
+      #infoPanel {
+        width: 100%;
+        height: auto;
+        right: auto;
+        bottom: -100%;
+        top: auto;
+        transition: bottom 0.5s ease;
+      }
+
+      #infoPanel.show {
+        bottom: 0;
+      }
+
+      #infoPanel button.close-btn {
+        top: 5px;
+        right: 5px;
+      }
+    }
   </style>
 </head>
 
 <body>
 
-  <!-- SIDE MENU -->
   <div id="sideMenu">
     <h2>Explore Venue</h2>
-    <button onclick="selectHotspot('hotspot-4')">Expandable Wall</button>
-    <button onclick="selectHotspot('hotspot-5')">Classroom Layout</button>
-    <button onclick="selectHotspot('hotspot-6')">Speakers</button>
-    <button onclick="selectHotspot('hotspot-9')">TV Display</button>
+    <button onclick="selectHotspot('hotspot-1')">LED Ekrāns</button>
+    <button onclick="selectHotspot('hotspot-2')">Gaismu Konstrukcija</button>
+    <button onclick="selectHotspot('hotspot-3')">Apaļo galdu izkārtojums</button>
+    <button onclick="selectHotspot('hotspot-4')">Skaņas sistēma</button>
   </div>
 
-  <!-- MODEL VIEWER -->
-  <model-viewer id="model" src="https://cdn.jsdelivr.net/gh/youngmark2001/Kempinski-shrunk@main/KempinskiEdited-v1.glb"
+  <model-viewer id="model"
+    src="https://storage.googleapis.com/dzelzscela-muzejs-gltf-file-for-html/dzelzscela-muzejs-bez-jumta-compressed/dzelzscela_muzejs_v1-v1.glb"
     ar
-    src="https://cdn.jsdelivr.net/gh/youngmark2001/Kempinski-shrunk@main/KempinskiEdited-v1.glb"
     ar-modes="webxr scene-viewer quick-look"
     camera-controls
     auto-rotate
-    tone-mapping="aces"
-    poster="poster.webp"
     shadow-intensity="0.97"
     exposure="1.03"
     shadow-softness="0.67"
-    min-camera-orbit="auto 0deg auto"
-    max-camera-orbit="auto 89deg auto"
     environment-image="legacy">
 
-    <!-- HOTSPOTS -->
-    <button class="Hotspot" 
-      slot="hotspot-4" 
-      data-position="45m 5.56m -14.78m" 
-      data-normal="0m 1m 0m" 
-      data-orbit="150deg 65deg 10m" 
+    <button class="Hotspot" slot="hotspot-1" data-position="-0.69m 5.59m -13.95m" data-normal="0 0 1" data-orbit="0deg 50deg 5m"
       data-visibility-attribute="visible"
-      onclick="showInfo('Expandable Wall', 'Ask for adjustment', 'A wall that can open/close to transform the space.')">
-      <div class="HotspotAnnotation">Expandable wall</div>
+      onclick="showInfo('LED Ekrāns', 'Ask for adjustment', 'LED screen positioned near the center of the room.')">
+      <div class="HotspotAnnotation">LED Ekrāns</div>
     </button>
 
-    <button class="Hotspot" 
-      slot="hotspot-5" 
-      data-position="45.09m 0.82m -16.64m" 
-      data-normal="0m 1m 0m" 
-      data-orbit="137deg 40deg 20m" 
+    <button class="Hotspot" slot="hotspot-2" data-position="8.82m 6.14m -14.04m" data-normal="0.25 0 0.96" data-orbit="0deg 50deg 5m"
       data-visibility-attribute="visible"
-      onclick="showInfo('Classroom Layout', 'Ask for adjustment', 'Perfect for seminars or training sessions.')">
-      <div class="HotspotAnnotation">Classroom layout</div>
+      onclick="showInfo('Gaismu Konstrukcija', 'Ask for adjustment', 'Lighting rig setup for events.')">
+      <div class="HotspotAnnotation">Gaismu Konstrukcija</div>
     </button>
 
-    <button class="Hotspot" 
-      slot="hotspot-6" 
-      data-position="61.91m 0.56m -15.81m" 
-      data-normal="-0.00008m 1m -0.001m" 
-      data-orbit="220deg 40deg 8m" 
+    <button class="Hotspot" slot="hotspot-3" data-position="-2.63m 1.29m 1.23m" data-normal="0 1 0" data-orbit="0deg 50deg 5m"
       data-visibility-attribute="visible"
-      onclick="showInfo('Speakers', '300 EUR + PVN', 'Premium sound system setup.')">
-      <div class="HotspotAnnotation">Speakers</div>
+      onclick="showInfo('Apaļo galdu izkārtojums', 'Ask for adjustment', 'Round table layout for workshops or dining.')">
+      <div class="HotspotAnnotation">Apaļo galdu izkārtojums</div>
     </button>
 
-    <button class="Hotspot" 
-      slot="hotspot-9" 
-      data-position="50.28m 1.72m -14.79m" 
-      data-normal="-0.93m 0m -0.37m" 
-      data-orbit="225deg 50deg 9m" 
+    <button class="Hotspot" slot="hotspot-4" data-position="-8.55m 1.51m -10.00m" data-normal="0 0 1" data-orbit="0deg 50deg 5m"
       data-visibility-attribute="visible"
-      onclick="showInfo('TV Displays', '200 EUR + PVN', 'Large LED screen for presentations.')">
-      <div class="HotspotAnnotation">TV</div>
+      onclick="showInfo('Skaņas sistēma', '300 EUR + PVN', 'Premium sound system setup.')">
+      <div class="HotspotAnnotation">Skaņas sistēma</div>
     </button>
-
   </model-viewer>
 
-  <!-- INFO PANEL -->
   <div id="infoPanel">
     <button class="close-btn" onclick="closePanel()">&times;</button>
     <h2 id="panelTitle"></h2>
     <h3 id="panelPrice"></h3>
     <p id="panelDescription"></p>
     <button class="book-btn" onclick="addToBasket()">Add to basket</button>
-
-
     <h3 style="margin-top:30px;">Basket</h3>
-    <ul id="basketList" style="list-style: none; padding: 0;"></ul>
+    <ul id="basketList" style="list-style:none; padding:0;"></ul>
   </div>
 
-  <!-- SCRIPTS -->
   <script>
     const modelViewer = document.querySelector('#model');
+    const basket = [];
 
-    modelViewer.querySelectorAll('.Hotspot').forEach((hotspot) => {
-      hotspot.addEventListener('click', () => {
-        const orbit = hotspot.dataset.orbit;
-        const target = hotspot.dataset.position;
-
+    modelViewer.querySelectorAll('.Hotspot').forEach(h => {
+      h.addEventListener('click', () => {
+        const orbit = h.dataset.orbit;
+        const target = h.dataset.position;
         if (orbit && target) {
           modelViewer.cameraTarget = target;
           modelViewer.cameraOrbit = orbit;
-          modelViewer.fieldOfView = '20deg';
           modelViewer.autoRotate = false;
         }
       });
@@ -262,128 +264,74 @@
       document.getElementById('panelTitle').innerText = title;
       document.getElementById('panelPrice').innerText = price;
       document.getElementById('panelDescription').innerText = description;
-      document.getElementById('infoPanel').style.right = '0';
+      document.getElementById('infoPanel').classList.add('show');
     }
 
     function closePanel() {
-      document.getElementById('infoPanel').style.right = '-320px';
+      document.getElementById('infoPanel').classList.remove('show');
     }
 
-    function selectHotspot(hotspotName) {
-      const button = document.querySelector(`[slot="${hotspotName}"]`);
-      if (button) {
-        button.click();
-      }
+    function selectHotspot(name) {
+      const el = document.querySelector(`[slot="${name}"]`);
+      if (el) el.click();
     }
 
-    const basket = []; // to store added items
+    function addToBasket() {
+      const title = document.getElementById('panelTitle').innerText;
+      const price = document.getElementById('panelPrice').innerText;
+      if (!title) return;
+      basket.push({ title, price });
+      renderBasket();
+    }
 
-function addToBasket() {
-  const title = document.getElementById('panelTitle').innerText;
-  const price = document.getElementById('panelPrice').innerText;
-  
-  // Avoid adding if nothing is selected
-  if (!title) return;
-  
-  // Create a basket item
-  const item = { title, price };
-  basket.push(item);
-  
-  renderBasket();
-}
+    function renderBasket() {
+      const list = document.getElementById('basketList');
+      list.innerHTML = '';
+      let total = 0;
 
-function renderBasket() {
-  const basketList = document.getElementById('basketList');
-  basketList.innerHTML = ''; // Clear it first
-  
-  let total = 0; // Keep track of the total
-  
-  basket.forEach((item, index) => {
-    const li = document.createElement('li');
-    li.style.display = 'flex';
-    li.style.justifyContent = 'space-between';
-    li.style.alignItems = 'center';
-    li.style.marginBottom = '8px';
+      basket.forEach((item, i) => {
+        const li = document.createElement('li');
+        li.style.display = 'flex';
+        li.style.justifyContent = 'space-between';
+        li.style.alignItems = 'center';
+        li.style.marginBottom = '8px';
 
-    const itemSpan = document.createElement('span');
-    itemSpan.innerHTML = `<strong>${item.title}</strong> - ${item.price}`;
+        const text = document.createElement('span');
+        text.innerHTML = `<strong>${item.title}</strong> - ${item.price}`;
 
-    const removeBtn = document.createElement('button');
-    removeBtn.textContent = '×'; // This is a real character, not an emoji;
-    removeBtn.style.background = 'none';
-    removeBtn.style.border = 'none';
-    removeBtn.style.color = 'red';
-    removeBtn.style.fontSize = '18px';
-    removeBtn.style.cursor = 'pointer';
-    removeBtn.onclick = () => removeFromBasket(index);
-    removeBtn.style.color = '#e63946'; // Nicer red
-removeBtn.style.fontWeight = 'bold';
-removeBtn.style.fontSize = '20px';
-removeBtn.style.padding = '2px 8px';
-removeBtn.style.borderRadius = '50%';
-removeBtn.onmouseover = () => { removeBtn.style.background = '#ffd6d6'; };
-removeBtn.onmouseout = () => { removeBtn.style.background = 'none'; };
+        const btn = document.createElement('button');
+        btn.textContent = '×';
+        btn.style = 'background:none; border:none; font-weight:bold; font-size:20px; color:#e63946; padding:2px 8px; border-radius:50%; cursor:pointer;';
+        btn.onmouseover = () => btn.style.background = '#ffd6d6';
+        btn.onmouseout = () => btn.style.background = 'none';
+        btn.onclick = () => removeFromBasket(i);
 
+        li.appendChild(text);
+        li.appendChild(btn);
+        list.appendChild(li);
 
-    li.appendChild(itemSpan);
-    li.appendChild(removeBtn);
-    basketList.appendChild(li);
+        const num = parseFloat(item.price.replace(/[^\d.]/g, '')) || 0;
+        total += num;
+      });
 
-    // Add up the total
-    const priceNumber = parseFloat(item.price.replace(/[^\d.]/g, '')) || 0;
-    total += priceNumber;
-  });
+      const totalLi = document.createElement('li');
+      totalLi.innerHTML = `<strong>Total:</strong> <span style="color:#3b8ee5;">${total.toFixed(2)} EUR</span> <span style="font-size:0.9em;">+ PVN</span>`;
+      totalLi.style.marginTop = '15px';
+      totalLi.style.borderTop = '1px solid #ccc';
+      totalLi.style.paddingTop = '10px';
+      list.appendChild(totalLi);
 
-  // Show total
-  const totalLi = document.createElement('li');
-  totalLi.style.marginTop = '15px';
-  totalLi.style.borderTop = '1px solid #ccc';
-  totalLi.style.paddingTop = '10px';
-  totalLi.innerHTML = `<strong>Total:</strong> ${total.toFixed(2)} EUR + PVN`;
-  totalLi.innerHTML = `<strong>Total:</strong> 
-                        <span style="color: #3b8ee5;">${total.toFixed(2)} EUR</span> 
-                        <span style="color: #3b8ee5; font-size: 0.9em;">+ PVN</span>`;
-  basketList.appendChild(totalLi);
-  const bookNowBtn = document.createElement('button');
-  bookNowBtn.innerText = "Book Now";
-  bookNowBtn.style.marginTop = '15px';
-  bookNowBtn.style.padding = '12px';
-  bookNowBtn.style.width = '100%';
-  bookNowBtn.style.backgroundColor = '#3b8ee5'; // Set button color to blue
-  bookNowBtn.style.color = '#f2f2f2'; // Set text color to white
-  bookNowBtn.style.border = 'none';
-  bookNowBtn.style.borderRadius = '8px';
-  bookNowBtn.style.fontSize = '16px';
-  bookNowBtn.style.fontFamily = 'Lexend, sans-serif'; // Set the font to match the rest of the page
-  bookNowBtn.style.cursor = 'pointer';
+      const bookBtn = document.createElement('button');
+      bookBtn.innerText = 'Book Now';
+      bookBtn.style = 'margin-top:15px; padding:12px; width:100%; background:#3b8ee5; color:#fff; border:none; border-radius:8px; font-size:16px; font-family:Lexend, sans-serif; cursor:pointer;';
+      bookBtn.onclick = () => alert("Booking confirmed!");
+      list.appendChild(bookBtn);
+    }
 
-  // Add action for the button (you can customize the action here)
-  bookNowBtn.onclick = () => {
-    alert("Booking confirmed!"); // Placeholder action
-  };
-
-  // Append the button after the total
-  basketList.appendChild(bookNowBtn);
-}
-function removeFromBasket(index) {
-  const basketList = document.getElementById('basketList');
-  const itemElements = basketList.querySelectorAll('li');
-  const itemToRemove = itemElements[index];
-
-  if (itemToRemove) {
-    itemToRemove.style.transition = 'opacity 0.5s, transform 0.5s';
-    itemToRemove.style.opacity = '0';
-    itemToRemove.style.transform = 'translateX(50px)';
-
-    setTimeout(() => {
-      basket.splice(index, 1); // Remove from array
-      renderBasket(); // Re-render the basket
-    }, 500); // Wait for animation to finish
-  }
-}
-
-
+    function removeFromBasket(i) {
+      basket.splice(i, 1);
+      renderBasket();
+    }
   </script>
-
 </body>
 </html>
